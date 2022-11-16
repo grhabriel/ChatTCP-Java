@@ -28,7 +28,9 @@ public class Tela extends JPanel {
     private String nome;
     private Cliente cliente;
 
-    public Tela(){
+    public Tela(Cliente cliente){
+        this.cliente = cliente;
+
         setLayout(null);
         telaPerguntaNomeIniciar();
     }
@@ -58,6 +60,7 @@ public class Tela extends JPanel {
 		botaoEnviarMensagem = new JButton("Enviar");
 		botaoEnviarMensagem.setBounds(375, 338, 105, 27);
 		add(botaoEnviarMensagem);
+        botaoEnviarMensagem.addActionListener(e -> enviar());
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(129, 54, 351, 263);
@@ -70,7 +73,8 @@ public class Tela extends JPanel {
 		scrollPane.setViewportView(areaDeMensagem);
 		areaDeMensagem.setEditable(false);
 		
-		JLabel lblSejaBemVindo = new JLabel("Seja Bem Vindo");
+        String msgBoasVindas = String.format("Seja Bem Vindo %s",this.nome);
+		JLabel lblSejaBemVindo = new JLabel(msgBoasVindas);
 		lblSejaBemVindo.setBounds(143, 27, 234, 17);
 		add(lblSejaBemVindo);
 		
@@ -87,9 +91,18 @@ public class Tela extends JPanel {
 		scrollPaneConectados.setViewportView(textoConectados);
     }
 
+    public void enviar(){
+        String msg = campoDeMensagemChat.getText();
+        if(msg == " " || msg ==""){
+            return;
+        }
+        campoDeMensagemChat.setText("");
+        cliente.enviarMensagem(msg);
+    }
+
     private void pegarNome(){
         if(campoNome.getText().contains(" ")){
-            return;
+            campoNome.setText("Guest");;
         }
         
         this.nome = campoNome.getText();
@@ -97,9 +110,11 @@ public class Tela extends JPanel {
         //Limpar Tela
         this.removeAll();
         this.revalidate();
+        
+        
         telaDeChatting();
         this.repaint();
-        //Chamar funcao de preencher com a nova tela
+        textoConectados.append(this.nome+"(você)\n");
     }
 
     public String getNome() {
