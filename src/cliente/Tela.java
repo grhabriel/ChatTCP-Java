@@ -11,6 +11,8 @@ import javax.swing.JScrollPane;
 
 
 public class Tela extends JPanel {
+    private String ipDoServidor;
+    private int porta;
 
     /********Primeira Tela*******/
     private JTextField campoNome;
@@ -31,8 +33,6 @@ public class Tela extends JPanel {
     public Tela(String ipDoServidor, int porta){
         setLayout(null);
         telaPerguntaNomeIniciar();
-        this.cliente = new Cliente(ipDoServidor, porta, nome,textoConectados,areaDeMensagem);
-
     }
 
     public void telaPerguntaNomeIniciar(){	
@@ -92,6 +92,8 @@ public class Tela extends JPanel {
 		textoConectados = new JTextArea();
         textoConectados.setEditable(false);
 		scrollPaneConectados.setViewportView(textoConectados);
+        this.cliente = new Cliente(ipDoServidor, porta, nome,textoConectados,areaDeMensagem);
+
     }
 
     public void enviar(){

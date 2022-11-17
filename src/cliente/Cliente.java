@@ -32,7 +32,7 @@ public class Cliente{
         } catch (Exception e) {
             System.out.println(e);
         }
-        acenoAoServidor();
+        //acenoAoServidor();
     }
 
     private void acenoAoServidor(){
@@ -42,7 +42,9 @@ public class Cliente{
             saida.write(mensagem);
             saida.newLine();
             saida.flush();
+            System.out.println("first");
             listaDeConectados = entrada.readLine();
+            System.out.println("eu");
         } catch (Exception e) {
             System.out.println(e);
         }
