@@ -6,8 +6,10 @@ import javax.swing.JFrame;
 public class App {
 
     public static void main(String[] args) {
-        Cliente cliente = new Cliente();
-        Tela tela = new Tela(cliente);
+        String ip = "192.168.0.1";
+        int porta = 44440;
+        //Cliente cliente = new Cliente();
+        Tela tela = new Tela(ip,porta);
         
         JFrame janela = new JFrame("Chat TCP");    
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
