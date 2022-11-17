@@ -7,10 +7,6 @@ import java.net.*;
 import javax.swing.JTextArea;
 
 public class Cliente{
-    /*******Gerar conexão*****/
-    private String ipDoServidor;
-    private int portaServidor;
-    
     /*Informações do cliente **/
     private Socket socket;
     private BufferedReader entrada;
@@ -21,47 +17,22 @@ public class Cliente{
     private JTextArea areaConectados; 
     private JTextArea areaMensagem;
 
-    public Cliente(String ipDoServidor, int portaDoServidor, String nome, JTextArea areaConectados, JTextArea areaMensagem){
-        this.ipDoServidor = ipDoServidor;
-        this.portaServidor = portaDoServidor;
+    public Cliente(Socket socket,String nome, JTextArea areaConectados, JTextArea areaMensagem){
         this.nomeCliente = nome;
+        this.areaMensagem = areaMensagem;
+        this.areaConectados = areaConectados;
+        
         try {
-            this.socket = new Socket(ipDoServidor,portaDoServidor);
+            this.socket = socket;
             this.entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.saida = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            enviarMensagem(nomeCliente);
         } catch (Exception e) {
             System.out.println(e);
-        }
-        //acenoAoServidor();
-    }
-
-    private void acenoAoServidor(){
-        String listaDeConectados = null;
-        try {
-            String mensagem = String.format("Conexao:%s",nomeCliente);
-            saida.write(mensagem);
-            saida.newLine();
-            saida.flush();
-            System.out.println("first");
-            listaDeConectados = entrada.readLine();
-            System.out.println("eu");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        
-        tratarLista(listaDeConectados); 
-    }
-
-    private void tratarLista(String lista){
-        if(lista == null){
+            fecharConexao(entrada, saida, socket);
             System.exit(1);
         }
-        String[] array = lista.split(",");
-        for (String pessoa : array) {
-            areaConectados.append(pessoa+"\n");
-        }
     }
-
 
     public void enviarMensagem(String msg){
         try {
@@ -72,6 +43,8 @@ public class Cliente{
             System.out.println(e);
         }
     }
+
+
     public void escutarMensagem(){
         new Thread(new Runnable() {
             @Override
@@ -80,12 +53,25 @@ public class Cliente{
                 while (socket.isConnected()) {
                     try {
                         mensagem_do_grupo = entrada.readLine();
+                        System.out.println(mensagem_do_grupo);
                         areaMensagem.append(mensagem_do_grupo+"\n");
                     } catch (Exception e) {
+                        fecharConexao(entrada, saida, socket);
                         System.out.println(e);
                     }
                 }
             }
         }).start();
+    }
+
+    public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){
+        try {
+            leitor.close();
+            saida.close();
+            socket.close();
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

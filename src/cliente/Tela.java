@@ -8,6 +8,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
+import java.io.IOException;
+import java.net.*;
 
 
 public class Tela extends JPanel {
@@ -52,6 +54,19 @@ public class Tela extends JPanel {
         
     }
     public void telaDeChatting(){
+        try {
+            Socket socket = new Socket(ipDoServidor, porta);
+            this.cliente = new Cliente(socket, nome,textoConectados,areaDeMensagem);
+            cliente.escutarMensagem();
+        
+        } catch (UnknownHostException e1) {
+            e1.printStackTrace();
+            System.exit(1);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.exit(1);
+        }
+        
         campoDeMensagemChat = new JTextArea();
 		campoDeMensagemChat.setBounds(12, 329, 351, 45);
 		campoDeMensagemChat.setLineWrap(true);
@@ -92,8 +107,7 @@ public class Tela extends JPanel {
 		textoConectados = new JTextArea();
         textoConectados.setEditable(false);
 		scrollPaneConectados.setViewportView(textoConectados);
-        this.cliente = new Cliente(ipDoServidor, porta, nome,textoConectados,areaDeMensagem);
-
+        
     }
 
     public void enviar(){
