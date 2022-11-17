@@ -26,10 +26,10 @@ public class Cliente{
             this.socket = socket;
             this.entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.saida = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            enviarMensagem(nomeCliente);
+            enviarMensagem(nome);
         } catch (Exception e) {
             System.out.println(e);
-            fecharConexao(entrada, saida, socket);
+            //fecharConexao(entrada, saida, socket);
             System.exit(1);
         }
     }
@@ -40,7 +40,8 @@ public class Cliente{
             saida.newLine();
             saida.flush();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
+            System.exit(1); 
         }
     }
 
@@ -56,8 +57,9 @@ public class Cliente{
                         System.out.println(mensagem_do_grupo);
                         areaMensagem.append(mensagem_do_grupo+"\n");
                     } catch (Exception e) {
-                        fecharConexao(entrada, saida, socket);
-                        System.out.println(e);
+                        //fecharConexao(entrada, saida, socket);
+                        e.printStackTrace();
+                        System.exit(1);
                     }
                 }
             }

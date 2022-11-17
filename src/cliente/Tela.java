@@ -54,18 +54,6 @@ public class Tela extends JPanel {
         
     }
     public void telaDeChatting(){
-        try {
-            Socket socket = new Socket(ipDoServidor, porta);
-            this.cliente = new Cliente(socket, nome,textoConectados,areaDeMensagem);
-            cliente.escutarMensagem();
-        
-        } catch (UnknownHostException e1) {
-            e1.printStackTrace();
-            System.exit(1);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-            System.exit(1);
-        }
         
         campoDeMensagemChat = new JTextArea();
 		campoDeMensagemChat.setBounds(12, 329, 351, 45);
@@ -108,6 +96,20 @@ public class Tela extends JPanel {
         textoConectados.setEditable(false);
 		scrollPaneConectados.setViewportView(textoConectados);
         
+
+        try {
+            Socket socket = new Socket("localhost", 1234);
+            this.cliente = new Cliente(socket, nome,textoConectados,areaDeMensagem);
+    
+        } catch (UnknownHostException e1) {
+            e1.printStackTrace();
+            System.exit(1);
+        } catch (IOException e1) {      
+            e1.printStackTrace();
+            System.exit(1);
+        }
+        cliente.escutarMensagem();    
+
     }
 
     public void enviar(){
@@ -117,7 +119,7 @@ public class Tela extends JPanel {
         }
         msg = nome+":"+msg;
         campoDeMensagemChat.setText("");
-        cliente.enviarMensagem(msg);
+        //cliente.enviarMensagem(msg);
     }
     private void pegarNome(){
         if(campoNome.getText().contains(" ")){
