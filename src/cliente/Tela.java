@@ -18,7 +18,7 @@ public class Tela extends JPanel {
     /****************************/
 
     /********Segunda Tela*******/
-    private JTextField campoDeMensagemChat; 
+    private JTextArea campoDeMensagemChat; 
     private JButton botaoEnviarMensagem;
     private JTextArea areaDeMensagem;
     private JTextArea textoConectados;
@@ -28,11 +28,11 @@ public class Tela extends JPanel {
     private String nome;
     private Cliente cliente;
 
-    public Tela(Cliente cliente){
-        this.cliente = cliente;
-
+    public Tela(String ipDoServidor, int porta){
         setLayout(null);
         telaPerguntaNomeIniciar();
+        this.cliente = new Cliente(ipDoServidor, porta, nome,textoConectados,areaDeMensagem);
+
     }
 
     public void telaPerguntaNomeIniciar(){	
@@ -48,14 +48,17 @@ public class Tela extends JPanel {
 		botaoEnviar = new JButton("Entrar");
 		botaoEnviar.setBounds(310, 73, 105, 27);
 		add(botaoEnviar);
-        botaoEnviar.addActionListener(e -> pegarNome());
+        botaoEnviar.addActionListener(e -> pegarNome());    
         
     }
     public void telaDeChatting(){
-        campoDeMensagemChat = new JTextField();
+        campoDeMensagemChat = new JTextArea();
 		campoDeMensagemChat.setBounds(12, 329, 351, 45);
-		add(campoDeMensagemChat);
+		campoDeMensagemChat.setLineWrap(true);
+		campoDeMensagemChat.setWrapStyleWord(true);
+        add(campoDeMensagemChat);
 		campoDeMensagemChat.setColumns(10);
+        
 		
 		botaoEnviarMensagem = new JButton("Enviar");
 		botaoEnviarMensagem.setBounds(375, 338, 105, 27);
@@ -96,10 +99,10 @@ public class Tela extends JPanel {
         if(msg == " " || msg ==""){
             return;
         }
+        msg = nome+":"+msg;
         campoDeMensagemChat.setText("");
         cliente.enviarMensagem(msg);
     }
-
     private void pegarNome(){
         if(campoNome.getText().contains(" ")){
             campoNome.setText("Guest");;
