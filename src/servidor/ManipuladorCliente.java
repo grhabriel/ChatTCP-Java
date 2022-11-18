@@ -21,7 +21,7 @@ public class ManipuladorCliente implements Runnable{
             this.nome = leitor.readLine();
 
             lista.add(this);
-            String novaConexao = "SERVIDOR:" +this.nome+"se conectou";
+            String novaConexao = "SERVIDOR: " +this.nome+" se conectou";
             fazerBroadcast(novaConexao);
         } catch (Exception e) {
             //fecharConexao(leitor, saida, socket);
@@ -35,7 +35,7 @@ public class ManipuladorCliente implements Runnable{
                 cliente.saida.flush();
                 
             } catch (Exception e) {
-                //fecharConexao(leitor, saida, socket);
+                fecharConexao(leitor, saida, socket);
             }
         }
     }
@@ -43,7 +43,7 @@ public class ManipuladorCliente implements Runnable{
     public void removerCliente(){
         lista.remove(this);
         System.out.println("Cliente se desconectou");
-        fazerBroadcast("SERVIDOR:"+nome+" se desconectou");
+        fazerBroadcast("SERVIDOR: "+nome+" se desconectou");
     }
 
     public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){

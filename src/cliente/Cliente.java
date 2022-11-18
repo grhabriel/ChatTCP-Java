@@ -26,7 +26,7 @@ public class Cliente{
             this.socket = socket;
             this.entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.saida = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            enviarMensagem(nome);
+            enviarMensagem(nomeCliente);
         } catch (Exception e) {
             System.out.println(e);
             //fecharConexao(entrada, saida, socket);
@@ -50,11 +50,13 @@ public class Cliente{
         new Thread(new Runnable() {
             @Override
             public void run(){
-                String mensagem_do_grupo;
+                
                 while (socket.isConnected()) {
+                    String mensagem_do_grupo = "";
                     try {
                         mensagem_do_grupo = entrada.readLine();
-                        System.out.println(mensagem_do_grupo);
+                        
+                        tratarMensagem(mensagem_do_grupo);
                         areaMensagem.append(mensagem_do_grupo+"\n");
                     } catch (Exception e) {
                         //fecharConexao(entrada, saida, socket);
@@ -65,6 +67,31 @@ public class Cliente{
             }
         }).start();
     }
+    private void tratarMensagem(String msg){
+        if(msg.startsWith("SERVIDOR:")){
+            if (msg.endsWith(" se conectou")) {
+                adicionarConectados(msg);
+            }
+            else if(msg.endsWith(" se desconectou")){
+                retirarDesconectados(msg);
+            }
+            else{//Lista de conectados
+                tratarListaDeConectados(msg);
+            }
+        }
+    }
+    private void tratarListaDeConectados(String msg){
+
+    }
+    
+    private void adicionarConectados(String msg){
+        String nome = msg.replace("SERVIDOR:","");
+        nome = nome.replace(" se conectou", "");
+        areaConectados.append(nome+"\n");
+    }
+    private void retirarDesconectados(String msg){
+
+    } 
 
     public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){
         try {

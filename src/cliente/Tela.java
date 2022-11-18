@@ -13,9 +13,6 @@ import java.net.*;
 
 
 public class Tela extends JPanel {
-    private String ipDoServidor;
-    private int porta;
-
     /********Primeira Tela*******/
     private JTextField campoNome;
     private JButton botaoEnviar;
@@ -119,7 +116,7 @@ public class Tela extends JPanel {
         }
         msg = nome+":"+msg;
         campoDeMensagemChat.setText("");
-        //cliente.enviarMensagem(msg);
+        cliente.enviarMensagem(msg);
     }
     private void pegarNome(){
         if(campoNome.getText().contains(" ")){
