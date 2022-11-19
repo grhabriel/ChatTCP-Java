@@ -4,6 +4,7 @@ package cliente;
 import java.io.*;
 import java.net.*;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JTextArea;
 
 public class Cliente{
@@ -14,10 +15,10 @@ public class Cliente{
     private String nomeCliente;
     
     /*****Interface grafica*/
-    private JTextArea areaConectados; 
+    private DefaultListModel<String> areaConectados; 
     private JTextArea areaMensagem;
 
-    public Cliente(Socket socket,String nome, JTextArea areaConectados, JTextArea areaMensagem){
+    public Cliente(Socket socket,String nome, DefaultListModel<String> areaConectados, JTextArea areaMensagem){
         this.nomeCliente = nome;
         this.areaMensagem = areaMensagem;
         this.areaConectados = areaConectados;
@@ -57,9 +58,11 @@ public class Cliente{
                         mensagem_do_grupo = entrada.readLine();
                         
                         tratarMensagem(mensagem_do_grupo);
-                        areaMensagem.append(mensagem_do_grupo+"\n");
+                        if(!mensagem_do_grupo.startsWith("LISTA:")){
+                            areaMensagem.append(mensagem_do_grupo+"\n");
+                        }
                     } catch (Exception e) {
-                        //fecharConexao(entrada, saida, socket);
+                        fecharConexao(entrada, saida, socket);
                         e.printStackTrace();
                         System.exit(1);
                     }
@@ -75,22 +78,29 @@ public class Cliente{
             else if(msg.endsWith(" se desconectou")){
                 retirarDesconectados(msg);
             }
-            else{//Lista de conectados
-                tratarListaDeConectados(msg);
-            }
+        }
+        if (msg.startsWith("LISTA:")) {
+            tratarListaDeConectados(msg);
         }
     }
-    private void tratarListaDeConectados(String msg){
 
+    private void tratarListaDeConectados(String msg){
+        String[] msgSplit =  msg.replace("LISTA:","").split(",");
+        for (String nome : msgSplit) {
+            areaConectados.addElement(nome);
+        }
+        
     }
     
     private void adicionarConectados(String msg){
         String nome = msg.replace("SERVIDOR:","");
         nome = nome.replace(" se conectou", "");
-        areaConectados.append(nome+"\n");
+        areaConectados.addElement(nome);
     }
     private void retirarDesconectados(String msg){
-
+        String nome = msg.replace("SERVIDOR:","");
+        nome = nome.replace(" se desconectou", "");
+        areaConectados.removeElement(nome);
     } 
 
     public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){

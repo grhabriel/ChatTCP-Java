@@ -1,8 +1,10 @@
 package cliente;
 
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -22,7 +24,9 @@ public class Tela extends JPanel {
     private JTextArea campoDeMensagemChat; 
     private JButton botaoEnviarMensagem;
     private JTextArea areaDeMensagem;
-    private JTextArea textoConectados;
+    //private JTextArea textoConectados;
+    private JList<String> listaConectados;
+    private DefaultListModel<String> modelo;
     /****************************/
     
     
@@ -89,14 +93,20 @@ public class Tela extends JPanel {
 		scrollPaneConectados.setBounds(12, 55, 105, 172);
 		add(scrollPaneConectados);
 		
-		textoConectados = new JTextArea();
-        textoConectados.setEditable(false);
-		scrollPaneConectados.setViewportView(textoConectados);
+        listaConectados = new JList<String>();
+		scrollPaneConectados.setViewportView(listaConectados);
+		modelo = new DefaultListModel<String>();
+        modelo.addElement(this.nome);
+        listaConectados.setModel(modelo);
+        
+		// textoConectados = new JTextArea();
+        // textoConectados.setEditable(false);
+		// scrollPaneConectados.setViewportView(textoConectados);
         
 
         try {
             Socket socket = new Socket("localhost", 1234);
-            this.cliente = new Cliente(socket, nome,textoConectados,areaDeMensagem);
+            this.cliente = new Cliente(socket, nome,modelo,areaDeMensagem);
     
         } catch (UnknownHostException e1) {
             e1.printStackTrace();
@@ -132,8 +142,7 @@ public class Tela extends JPanel {
         
         telaDeChatting();
         this.repaint();
-        textoConectados.append(this.nome+"(você)\n");
-    }
+    }   
 
     public String getNome() {
         return nome;

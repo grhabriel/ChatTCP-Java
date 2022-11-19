@@ -19,13 +19,32 @@ public class ManipuladorCliente implements Runnable{
             this.saida = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.leitor = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.nome = leitor.readLine();
-
-            lista.add(this);
+            enviarLista();
             String novaConexao = "SERVIDOR: " +this.nome+" se conectou";
             fazerBroadcast(novaConexao);
+            lista.add(this);
+            
+
         } catch (Exception e) {
             //fecharConexao(leitor, saida, socket);
         }
+    }
+    private void enviarLista(){
+        String listaStripada = "LISTA:";
+        for (ManipuladorCliente cliente : lista) {
+            listaStripada+=cliente.nome+",";
+        }
+
+        try {
+            this.saida.write(listaStripada);
+            this.saida.newLine();
+            this.saida.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            fecharConexao(leitor, saida, socket);
+        }
+        
+        
     }
     public void fazerBroadcast(String msg){
         for (ManipuladorCliente cliente : lista) {
