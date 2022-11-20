@@ -54,6 +54,7 @@ public class Tela extends JPanel {
         botaoEnviar.addActionListener(e -> pegarNome());    
         
     }
+    
     public void telaDeChatting(){
         
         campoDeMensagemChat = new JTextArea();
@@ -98,7 +99,7 @@ public class Tela extends JPanel {
 		modelo = new DefaultListModel<String>();
         modelo.addElement(this.nome);
         listaConectados.setModel(modelo);
-        
+
 		// textoConectados = new JTextArea();
         // textoConectados.setEditable(false);
 		// scrollPaneConectados.setViewportView(textoConectados);
@@ -114,7 +115,7 @@ public class Tela extends JPanel {
         } catch (IOException e1) {      
             e1.printStackTrace();
             System.exit(1);
-        }
+        }       
         cliente.escutarMensagem();    
 
     }

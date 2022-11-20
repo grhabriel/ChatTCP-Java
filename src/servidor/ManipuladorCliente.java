@@ -59,19 +59,21 @@ public class ManipuladorCliente implements Runnable{
         }
     }
 
-    public void removerCliente(){
-        lista.remove(this);
-        System.out.println("Cliente se desconectou");
-        fazerBroadcast("SERVIDOR: "+nome+" se desconectou");
+    public synchronized void removerCliente(){
+        if(lista.remove(this)){
+            System.out.println("Cliente se desconectou");
+            System.out.println(nome);
+            fazerBroadcast("SERVIDOR: "+nome+" se desconectou");
+        }
     }
 
-    public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){
+    public void fecharConexao(  BufferedReader leitor, BufferedWriter saida, Socket socket){
         removerCliente();
         try {
-            leitor.close();
+            leitor.close(); 
             saida.close();
             socket.close();
-                
+            
         } catch (Exception e) {
             System.out.println(e);
         }

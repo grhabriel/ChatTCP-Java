@@ -56,7 +56,7 @@ public class Cliente{
                     String mensagem_do_grupo = "";
                     try {
                         mensagem_do_grupo = entrada.readLine();
-                        
+                        System.out.println(mensagem_do_grupo);
                         tratarMensagem(mensagem_do_grupo);
                         if(!mensagem_do_grupo.startsWith("LISTA:")){
                             areaMensagem.append(mensagem_do_grupo+"\n");
@@ -81,7 +81,7 @@ public class Cliente{
         }
         if (msg.startsWith("LISTA:")) {
             tratarListaDeConectados(msg);
-        }
+        }  
     }
 
     private void tratarListaDeConectados(String msg){
@@ -100,6 +100,7 @@ public class Cliente{
     private void retirarDesconectados(String msg){
         String nome = msg.replace("SERVIDOR:","");
         nome = nome.replace(" se desconectou", "");
+        
         areaConectados.removeElement(nome);
     } 
 
