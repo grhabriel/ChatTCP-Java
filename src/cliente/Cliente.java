@@ -100,8 +100,10 @@ public class Cliente{
     private void retirarDesconectados(String msg){
         String nome = msg.replace("SERVIDOR:","");
         nome = nome.replace(" se desconectou", "");
+        if(areaConectados.removeElement(nome)){
+            System.out.println("Cliente removido");
+        }
         
-        areaConectados.removeElement(nome);
     } 
 
     public void fecharConexao(BufferedReader leitor, BufferedWriter saida, Socket socket){

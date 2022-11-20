@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 public class App {
 
     public static void main(String[] args) {
-        String ip = "192.168.1.7";
-        int porta = 8080;
+        String ip = "localhost";
+        int porta = 1234;
         
         Tela tela = new Tela(ip,porta);
         

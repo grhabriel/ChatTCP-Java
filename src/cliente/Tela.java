@@ -33,8 +33,12 @@ public class Tela extends JPanel {
     private String nome;
     private Cliente cliente;
 
+    private String ipDoservidor;
+    private int porta;
     public Tela(String ipDoServidor, int porta){
         setLayout(null);
+        this.ipDoservidor = ipDoServidor;
+        this.porta = porta;
         telaPerguntaNomeIniciar();
     }
 
@@ -106,7 +110,7 @@ public class Tela extends JPanel {
         
 
         try {
-            Socket socket = new Socket("localhost", 1234);
+            Socket socket = new Socket(ipDoservidor, porta);
             this.cliente = new Cliente(socket, nome,modelo,areaDeMensagem);
     
         } catch (UnknownHostException e1) {
